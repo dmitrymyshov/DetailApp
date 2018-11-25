@@ -1,74 +1,83 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace HandleApp
 {
+    /// <summary>
+    /// Класс параметров ручки, содержащий информацию о длине задней 
+    /// и передней части, диаметре отвертия и  задей части, 
+    /// и о количетве вырезов 
+    /// </summary>
     public class HandleParameters
     {
-        private double _backDiameter;
+        public double BackDiameter { get; private set; }
 
-        private double _backLenght;
+        public double BackLenght { get; private set; }
 
-        private double _frontLenght;
+        public double FrontLenght { get; private set; }
 
-        private double _holeDiameter;
+        public double HoleDiameter { get; private set; }
 
-        private int _notchCount;
+        public int NotchCount { get; private set; }
 
-        public double BackDiameter
+        /// <summary>
+        /// Конструктор класса
+        /// </summary>
+        /// <param name="backDiameter">Радиус задней части руки</param>
+        /// <param name="backLenght">Длина задней части ручки</param>
+        /// <param name="frontLenght">Длина передней асти ручкиparam>
+        /// <param name="holeDiameter">Радиус тверстия ручки</param>
+        /// <param name="notchCount">Количество вырезов на передней части</param>
+        public HandleParameters(double backDiameter, double backLenght, 
+            double frontLenght, double holeDiameter, int notchCount)
         {
-            get { return _backDiameter; }
+            //TODO: Проверка на NaN, Inf
+            BackDiameter = backDiameter;
+            BackLenght = backLenght;
+            FrontLenght = frontLenght;
+            HoleDiameter = holeDiameter;
+            NotchCount = notchCount;
 
-            private set {; }
+            Validating();
         }
 
-        public double BackLenght
+        /// <summary>
+        /// Клас валидации диапозона допустимых зачений
+        /// </summary>
+        private void Validating()
         {
-            get { return _backLenght; }
+            var errorMessage = new List<string>();
 
-            private set {; }
-        }
-
-        public double FrontLenght
-        {
-            get { return _frontLenght; }
-
-            private set {; }
-        }
-
-        public double HoleDiameter
-        {
-            get { return _holeDiameter; }
-
-            private set {; }
-        }
-
-        public int NotchCount
-        {
-            get { return _notchCount; }
-
-            private set {; }
-        }
-
-        public HandleParameters(double backDiameter, double backLenght, double frontLenght, double holeDiameter, int notchCount)
-        {
-            _backDiameter = backDiameter;
-            _backLenght = backLenght;
-            _frontLenght = frontLenght;
-            _holeDiameter = holeDiameter;
-            _notchCount = notchCount;
-        }
-
-        public bool Validate()
-        {
-            if ((BackDiameter < 3 || BackDiameter > 4) || (BackLenght < 2 || BackLenght > 4) 
-             || (FrontLenght < 2 || FrontLenght > 4) || (HoleDiameter < 1 || HoleDiameter > 2) 
-             || (NotchCount < 2 || NotchCount > 5))
+            if (BackDiameter < 3 || BackDiameter > 4)
             {
-                return false;
+                errorMessage.Add("Диаметр задней части ручки должен быть от 3см до 4см\n ");
             }
-            else
+            if (BackLenght < 2 || BackLenght > 4)
             {
-                return true;
+                errorMessage.Add("Длина задней части должна быть от 2см до 4см\n ");
+            }
+            if (FrontLenght < 2 || FrontLenght > 4)
+            {
+                errorMessage.Add("Длина передней части должна быть от 2см до 4см\n ");
+            }
+            if (HoleDiameter < 1 || HoleDiameter > 2)
+            {
+                errorMessage.Add("Диаметр отверстия должен быть от 1см до 2см\n ");
+            }
+            if (NotchCount < 2 || NotchCount > 5)
+            {
+                errorMessage.Add("Количество вырезов должно быть от 2 до 5\n ");
+            }
+
+            if (errorMessage.Count != 0)
+            {
+                var error = string.Empty;
+
+                foreach (string element in errorMessage)
+                {
+                    error += element;
+                }
+                throw new ArgumentException(error);
             }
         }
     }

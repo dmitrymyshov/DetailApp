@@ -1,6 +1,6 @@
 ﻿namespace HandleAppUI
 {
-    partial class Form1
+    partial class HandleForm
     {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -49,7 +49,10 @@
             // 
             // StartKompasButton
             // 
+            this.StartKompasButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.StartKompasButton.Location = new System.Drawing.Point(52, 19);
+            this.StartKompasButton.MaximumSize = new System.Drawing.Size(75, 23);
+            this.StartKompasButton.MinimumSize = new System.Drawing.Size(75, 23);
             this.StartKompasButton.Name = "StartKompasButton";
             this.StartKompasButton.Size = new System.Drawing.Size(75, 23);
             this.StartKompasButton.TabIndex = 0;
@@ -59,8 +62,11 @@
             // 
             // CloseKompasButton
             // 
+            this.CloseKompasButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.CloseKompasButton.Enabled = false;
             this.CloseKompasButton.Location = new System.Drawing.Point(161, 19);
+            this.CloseKompasButton.MaximumSize = new System.Drawing.Size(75, 23);
+            this.CloseKompasButton.MinimumSize = new System.Drawing.Size(75, 23);
             this.CloseKompasButton.Name = "CloseKompasButton";
             this.CloseKompasButton.Size = new System.Drawing.Size(75, 23);
             this.CloseKompasButton.TabIndex = 1;
@@ -70,6 +76,7 @@
             // 
             // CreateDetailButton
             // 
+            this.CreateDetailButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.CreateDetailButton.Enabled = false;
             this.CreateDetailButton.Location = new System.Drawing.Point(108, 187);
             this.CreateDetailButton.Name = "CreateDetailButton";
@@ -81,57 +88,67 @@
             // 
             // BackLenghtTextBox
             // 
+            this.BackLenghtTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.BackLenghtTextBox.Location = new System.Drawing.Point(181, 62);
             this.BackLenghtTextBox.Name = "BackLenghtTextBox";
-            this.BackLenghtTextBox.Size = new System.Drawing.Size(92, 20);
+            this.BackLenghtTextBox.Size = new System.Drawing.Size(91, 20);
             this.BackLenghtTextBox.TabIndex = 3;
             this.BackLenghtTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ValidateDoubleTextBoxs_KeyPress);
             // 
             // BackDiameterTextBox
             // 
+            this.BackDiameterTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.BackDiameterTextBox.Location = new System.Drawing.Point(181, 32);
             this.BackDiameterTextBox.Name = "BackDiameterTextBox";
-            this.BackDiameterTextBox.Size = new System.Drawing.Size(92, 20);
+            this.BackDiameterTextBox.Size = new System.Drawing.Size(91, 20);
             this.BackDiameterTextBox.TabIndex = 4;
             this.BackDiameterTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ValidateDoubleTextBoxs_KeyPress);
             // 
             // FrontLenghtTextBox
             // 
+            this.FrontLenghtTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.FrontLenghtTextBox.Location = new System.Drawing.Point(181, 92);
             this.FrontLenghtTextBox.Name = "FrontLenghtTextBox";
-            this.FrontLenghtTextBox.Size = new System.Drawing.Size(92, 20);
+            this.FrontLenghtTextBox.Size = new System.Drawing.Size(91, 20);
             this.FrontLenghtTextBox.TabIndex = 5;
             this.FrontLenghtTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ValidateDoubleTextBoxs_KeyPress);
             // 
             // HoleDiameterTextBox
             // 
+            this.HoleDiameterTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.HoleDiameterTextBox.Location = new System.Drawing.Point(181, 122);
             this.HoleDiameterTextBox.Name = "HoleDiameterTextBox";
-            this.HoleDiameterTextBox.Size = new System.Drawing.Size(92, 20);
+            this.HoleDiameterTextBox.Size = new System.Drawing.Size(91, 20);
             this.HoleDiameterTextBox.TabIndex = 6;
             this.HoleDiameterTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ValidateDoubleTextBoxs_KeyPress);
             // 
             // NotchCountTextBox
             // 
+            this.NotchCountTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.NotchCountTextBox.Location = new System.Drawing.Point(181, 152);
             this.NotchCountTextBox.Name = "NotchCountTextBox";
-            this.NotchCountTextBox.Size = new System.Drawing.Size(92, 20);
+            this.NotchCountTextBox.Size = new System.Drawing.Size(91, 20);
             this.NotchCountTextBox.TabIndex = 7;
             this.NotchCountTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ValidateIntTextBoxs_KeyPress);
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.CloseKompasButton);
             this.groupBox1.Controls.Add(this.StartKompasButton);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(301, 57);
+            this.groupBox1.Size = new System.Drawing.Size(300, 57);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Компас - 3D";
             // 
             // groupBox2
             // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.CreateDetailButton);
@@ -145,13 +162,14 @@
             this.groupBox2.Controls.Add(this.BackLenghtTextBox);
             this.groupBox2.Location = new System.Drawing.Point(12, 75);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(301, 221);
+            this.groupBox2.Size = new System.Drawing.Size(300, 221);
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Построение ручки для крана";
             // 
             // label5
             // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(16, 155);
             this.label5.Name = "label5";
@@ -161,6 +179,7 @@
             // 
             // label4
             // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(16, 125);
             this.label4.Name = "label4";
@@ -170,6 +189,7 @@
             // 
             // label3
             // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(16, 95);
             this.label3.Name = "label3";
@@ -179,6 +199,7 @@
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(16, 65);
             this.label2.Name = "label2";
@@ -188,6 +209,7 @@
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(16, 35);
             this.label1.Name = "label1";
@@ -195,14 +217,16 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Диаметр задней части";
             // 
-            // Form1
+            // HandleForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(325, 308);
+            this.ClientSize = new System.Drawing.Size(324, 308);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Name = "Form1";
+            this.MaximumSize = new System.Drawing.Size(390, 410);
+            this.MinimumSize = new System.Drawing.Size(320, 330);
+            this.Name = "HandleForm";
             this.Text = "HandleApp";
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);

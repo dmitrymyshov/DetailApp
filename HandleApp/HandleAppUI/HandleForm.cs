@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using HandleApp;
+using System.Collections.Generic;
 
 namespace HandleAppUI
 {
-    public partial class Form1 : Form
+    public partial class HandleForm : Form
     {
-        public Form1()
+        public HandleForm()
         {
             InitializeComponent();
 
@@ -18,40 +20,33 @@ namespace HandleAppUI
         private void StartKompasButton_Click(object sender, EventArgs e)
         {
             _connector.StartKompas();
-
+            //TODO: duble
             CreateDetailButton.Enabled = true;
-
             CloseKompasButton.Enabled = true;
-
             StartKompasButton.Enabled = false;
         }
 
         private void CloseKompasButton_Click(object sender, EventArgs e)
         {
             _connector.CloseKompas3D();
-
+            //TODO: duble
             StartKompasButton.Enabled = true;
-
             CreateDetailButton.Enabled = false;
-
             CloseKompasButton.Enabled = false;
         }
 
         private void CreateDetailButton_Click(object sender, EventArgs e)
         {
-            double backDiameter;
-            double backLenght;
-            double frontLenght;
-            double holeDiameter;
-            int notchCount;
-
             try
             {
-                backDiameter = double.Parse(BackDiameterTextBox.Text);
-                backLenght = double.Parse(BackLenghtTextBox.Text);
-                frontLenght = double.Parse(FrontLenghtTextBox.Text);
-                holeDiameter = double.Parse(HoleDiameterTextBox.Text);
-                notchCount = int.Parse(NotchCountTextBox.Text);
+                 var parameters = new HandleParameters(double.Parse(BackDiameterTextBox.Text),
+                     double.Parse(BackLenghtTextBox.Text),
+                     double.Parse(FrontLenghtTextBox.Text),
+                     double.Parse(HoleDiameterTextBox.Text),
+                     int.Parse(NotchCountTextBox.Text));
+
+                var builder = new HandleBuilder(_connector.Kompas);
+                builder.CreateDetail(parameters);
             }
             catch (FormatException ex)
             {
@@ -61,49 +56,32 @@ namespace HandleAppUI
                     MessageBoxIcon.Warning);
                 return;
             }
-
-            var parameters = new HandleParameters(backDiameter, backLenght, frontLenght, holeDiameter, notchCount);
-
-            if (!parameters.Validate())
+            catch (ArgumentException ex)
             {
-                MessageBox.Show("Параметры введены неправильно \n " +
-                                "Диаметр задней части ручки должен быть от 3см до 4см\n " +
-                                "Длина задней части должна быть от 2см до 4см\n " +
-                                "Длина передней части должна быть от 2см до 4см\n " +
-                                "Диаметр отверстия должен быть от 1см до 2см\n " +
-                                "Количество вырезов должно быть от 2 до 5\n ",
+                MessageBox.Show(ex.Message,
                     "Предупреждение",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
                 return;
             }
-
-            try
-            {
-                var builder = new HandleBuilder(_connector.Kompas);
-
-                builder.CreateDetail(parameters);
-            }
-            catch (Exception ex)
+            catch (COMException)
             {
                 MessageBox.Show("Невозможно построить деталь так как Компас закрыт",
                     "Предупреждение",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
-
+                //TODO: duble
                 StartKompasButton.Enabled = true;
-
                 CreateDetailButton.Enabled = false;
-
                 CloseKompasButton.Enabled = false;
 
                 return;
             }
-
         }
 
         private void ValidateDoubleTextBoxs_KeyPress(object sender, KeyPressEventArgs e)
         {
+            //TODO: regex
             var symbol = e.KeyChar;
             if (e.KeyChar == '.')
             {
@@ -114,6 +92,7 @@ namespace HandleAppUI
 
         private void ValidateIntTextBoxs_KeyPress(object sender, KeyPressEventArgs e)
         {
+            //TODO: regex
             var symbol = e.KeyChar;
 
             e.Handled = !(char.IsDigit(symbol) || symbol == '\b');

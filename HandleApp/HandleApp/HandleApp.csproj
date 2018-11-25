@@ -12,6 +12,8 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,27 +37,27 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Kompas6API2D5COM">
-      <HintPath>D:\solidworks\SDK\C#\Common\Kompas6API2D5COM.dll</HintPath>
+      <HintPath>D:\kompas\SDK\C#\Common\Kompas6API2D5COM.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Kompas6API3D5COM">
-      <HintPath>D:\solidworks\SDK\C#\Common\Kompas6API3D5COM.dll</HintPath>
+      <HintPath>D:\kompas\SDK\C#\Common\Kompas6API3D5COM.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Kompas6API5">
-      <HintPath>D:\solidworks\SDK\C#\Common\Kompas6API5.dll</HintPath>
+      <HintPath>D:\kompas\SDK\C#\Common\Kompas6API5.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Kompas6Constants">
-      <HintPath>D:\solidworks\SDK\C#\Common\Kompas6Constants.dll</HintPath>
+      <HintPath>D:\kompas\SDK\C#\Common\Kompas6Constants.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Kompas6Constants3D">
-      <HintPath>D:\solidworks\SDK\C#\Common\Kompas6Constants3D.dll</HintPath>
+      <HintPath>D:\kompas\SDK\C#\Common\Kompas6Constants3D.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="KompasAPI7">
-      <HintPath>D:\solidworks\SDK\C#\Common\KompasAPI7.dll</HintPath>
+      <HintPath>D:\kompas\SDK\C#\Common\KompasAPI7.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />

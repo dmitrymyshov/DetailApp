@@ -3,107 +3,181 @@ using Kompas6Constants3D;
 
 namespace HandleApp
 {
+    /// <summary>
+    /// Класс построения детали Ручка
+    /// </summary>
     public class HandleBuilder
     {
         private KompasObject _kompas;
 
+        private ksDocument3D _doc3D;
+
+        private ksPart _part;
+
+        private ksEntity _entitySketch;
+
+        private ksSketchDefinition _sketchDefinition;
+
+        private ksDocument2D _sketchEdit;
+
+        /// <summary>
+        /// Конструктор класса
+        /// </summary>
+        /// <param name="kompas">Интерфейс API КОМПАС</param>
         public HandleBuilder(KompasObject kompas)
         {
-            this._kompas = kompas;
+            _kompas = kompas;
         }
 
+        /// <summary>
+        /// Главнй метод построения детали
+        /// </summary>
+        /// <param name="parameters">Входные параметры детали</param>
         public void CreateDetail(HandleParameters parameters)
         {
-            //СОЗДАНИЕ НОВОЙ ДЕТАЛИ
             if (_kompas != null)
             {
-                var document3D = (ksDocument3D)_kompas.Document3D(); //получение указателя на интерфейс документа 3D модели
-
-                document3D.Create(false, true); //создание детали, где false - значит видимое редактирование документа true - деталь а не сборка
+                _doc3D = (ksDocument3D)_kompas.Document3D();
+                _doc3D.Create(false, true); 
             }
 
-            //ПАРАМЕТРЫ
             var backRadius = parameters.BackDiameter * 5;
             var backLenght = parameters.BackLenght * 10;
             var frontLenght = parameters.FrontLenght * 10;
-            var holeRadius = parameters.HoleDiameter / 0.2;
+            var holeRadius = parameters.HoleDiameter * 5;
             var notchCount = parameters.NotchCount;
 
-            //СОЗДАНИЕ САМОЙ РУЧКИ
-            var doc3D = (ksDocument3D)_kompas.ActiveDocument3D(); //получение указателя на интерфейс ТЕКУЩЕГО документа 3D модели
 
-            var part = (ksPart)doc3D.GetPart((short)Part_Type.pTop_Part); //интерфейс детали
+            _doc3D = (ksDocument3D)_kompas.ActiveDocument3D(); 
+            _part = (ksPart)_doc3D.GetPart((short)Part_Type.pTop_Part);
 
-            //эскиз стандарт. плоскостиZOY 
-            var entitySketch = (ksEntity)part.NewEntity((short)Obj3dType.o3d_sketch); //интерфейс элемнта детали - эскиз
+            CreateMainSketch(backRadius, backLenght, frontLenght, holeRadius);
 
-            var sketchDefinition = (ksSketchDefinition)entitySketch.GetDefinition(); //интерфейс параметров эскиза
+            RotateSketch();
 
-            var plane = (ksEntity)part.GetDefaultEntity((short)Obj3dType.o3d_planeYOZ); //выбираем плоскость ZOY
+            CreateNotchSketch();
 
-            sketchDefinition.SetPlane(plane);   // установим выбранную плоскость для эскиза
-            entitySketch.Create(); // создаем эскиз
+            ExtrudeSketch(frontLenght, backLenght, notchCount);
+        }
 
-            var sketchEdit = (ksDocument2D)sketchDefinition.BeginEdit(); //интерфейс редактора эскиза
+        /// <summary>
+        /// Метод, создающий осовной эскиз самой ручки
+        /// </summary>
+        /// <param name="backRadius">Радиус задней части руки</param>
+        /// <param name="backLenght">Длина задней части ручки</param>
+        /// <param name="frontLenght">Длина передней части ручки</param>
+        /// <param name="holeRadius">Радиус тверстия ручки</param>
+        private void CreateMainSketch
+            (double backRadius, double backLenght, double frontLenght, double holeRadius)
+        {
+            CreateEntitySketch((short)Obj3dType.o3d_planeYOZ);
 
-            sketchEdit.ksLineSeg(-backLenght + 3, -holeRadius, -backLenght, -holeRadius - 4, 1);
-            sketchEdit.ksLineSeg(-backLenght, -holeRadius - 4, -backLenght, -backRadius, 1);
-            sketchEdit.ksLineSeg(-backLenght, -backRadius, 0, -backRadius, 1);
-            sketchEdit.ksLineSeg(0, -backRadius, 0, -20, 1); //25
-            sketchEdit.ksLineSeg(0, -20, 6.5, -30, 1);//25
-            sketchEdit.ksLineSeg(6.5, -30, frontLenght - 6.5, -30, 1);
-            sketchEdit.ksLineSeg(frontLenght - 6.5, -30, frontLenght, -20, 1);
-            sketchEdit.ksLineSeg(frontLenght, -20, frontLenght, -holeRadius - 4, 1);
-            sketchEdit.ksLineSeg(frontLenght, -holeRadius - 4, frontLenght - 3, -holeRadius, 1);
-            sketchEdit.ksLineSeg(frontLenght - 3, -holeRadius, -backLenght + 3, -holeRadius, 1);
-            sketchEdit.ksLineSeg(-45, 0, 45, 0, 3); //осевая линия
-            sketchDefinition.EndEdit();	// завершение редактирования эскиза
+            _sketchEdit = (ksDocument2D)_sketchDefinition.BeginEdit(); 
 
-            //выдавливание вращением
-            var entityRotated = (ksEntity)part.NewEntity((short)Obj3dType.o3d_baseRotated);
-            var entityRotatedDefinition = (ksBaseRotatedDefinition)entityRotated.GetDefinition();
+            _sketchEdit.ksLineSeg
+                (-backLenght + 3, -holeRadius, -backLenght, -holeRadius - 4, 1);
+            _sketchEdit.ksLineSeg
+                (-backLenght, -holeRadius - 4, -backLenght, -backRadius, 1);
+            _sketchEdit.ksLineSeg
+                (-backLenght, -backRadius, 0, -backRadius, 1);
+            _sketchEdit.ksLineSeg
+                (0, -backRadius, 0, -20, 1); 
+            _sketchEdit.ksLineSeg
+                (0, -20, 6.5, -30, 1);
+            _sketchEdit.ksLineSeg
+                (6.5, -30, frontLenght - 6.5, -30, 1);
+            _sketchEdit.ksLineSeg
+                (frontLenght - 6.5, -30, frontLenght, -20, 1);
+            _sketchEdit.ksLineSeg
+                (frontLenght, -20, frontLenght, -holeRadius - 4, 1);
+            _sketchEdit.ksLineSeg
+                (frontLenght, -holeRadius - 4, frontLenght - 3, -holeRadius, 1);
+            _sketchEdit.ksLineSeg
+                (frontLenght - 3, -holeRadius, -backLenght + 3, -holeRadius, 1);
+            _sketchEdit.ksLineSeg
+                (-45, 0, 45, 0, 3); 
+            _sketchDefinition.EndEdit();	
+        }
+
+        /// <summary>
+        /// Метод для выдавливания вращением осовного эскиза
+        /// </summary>
+        private void RotateSketch()
+        {
+            var entityRotated = 
+                (ksEntity)_part.NewEntity((short)Obj3dType.o3d_baseRotated);
+            var entityRotatedDefinition = 
+                (ksBaseRotatedDefinition)entityRotated.GetDefinition();
 
             entityRotatedDefinition.directionType = 0;
             entityRotatedDefinition.SetSideParam(true, 360);
-            entityRotatedDefinition.SetSketch(entitySketch);
+            entityRotatedDefinition.SetSketch(_entitySketch);
             entityRotated.Create();
+        }
 
-            //плоскостьXOY для вырезов
-            entitySketch = (ksEntity)part.NewEntity((short)Obj3dType.o3d_sketch);
-            plane = (ksEntity)part.GetDefaultEntity((short)Obj3dType.o3d_planeXOY); //выбираем плоскость XOY
+        /// <summary>
+        /// Метод, создающий эскиз вырезов на передней части ручки
+        /// </summary>
+        private void CreateNotchSketch()
+        {
+            CreateEntitySketch((short)Obj3dType.o3d_planeXOY);
 
-            sketchDefinition = (ksSketchDefinition)entitySketch.GetDefinition();
-            sketchDefinition.SetPlane(plane);
-            entitySketch.Create();
+            _sketchEdit = (ksDocument2D)_sketchDefinition.BeginEdit();
+            _sketchEdit.ksCircle(0, 40, 19, 1);
+            _sketchDefinition.EndEdit(); 
+        }
 
-            sketchEdit = (ksDocument2D)sketchDefinition.BeginEdit(); //интерфейс редактора эскиза
-            sketchEdit.ksCircle(0, 40, 19, 1);
-            sketchDefinition.EndEdit(); // завершение редактирования эскиза
+        /// <summary>
+        /// Метод, выдавливающий эскизы вырезов
+        /// </summary>
+        /// <param name="frontLenght">Длина передней части ручки</param>
+        /// <param name="backLenght">Длина задней части ручки</param>
+        /// <param name="notchCount">Количество вырезов на ручке</param>
+        private void ExtrudeSketch
+            (double frontLenght, double backLenght, int notchCount)
+        {
+            var entityCutExtrusion = 
+                (ksEntity)_part.NewEntity((short)Obj3dType.o3d_cutExtrusion); 
 
-            //выдавливание выреза
-            var entityCutExtrusion = (ksEntity)part.NewEntity((short)Obj3dType.o3d_cutExtrusion); //интерфейс элемнта детали - вращение
-
-            var cutExtrusionDefinition = (ksCutExtrusionDefinition)entityCutExtrusion.GetDefinition(); //интерфейс параметров вращения
+            var cutExtrusionDefinition = 
+                (ksCutExtrusionDefinition)entityCutExtrusion.GetDefinition(); 
 
             cutExtrusionDefinition.cut = true;
             cutExtrusionDefinition.directionType = (short)Direction_Type.dtNormal;
             cutExtrusionDefinition.SetSideParam(true, 0, frontLenght + backLenght);
-            cutExtrusionDefinition.SetSketch(entitySketch);
+            cutExtrusionDefinition.SetSketch(_entitySketch);
             entityCutExtrusion.Create();
 
-            //концентрическая сетка
-            var entityCircularCopy = (ksEntity)part.NewEntity((short)Obj3dType.o3d_circularCopy);
+            var entityCircularCopy = 
+                (ksEntity)_part.NewEntity((short)Obj3dType.o3d_circularCopy);
 
-            var circCopyDefinition = (ksCircularCopyDefinition)entityCircularCopy.GetDefinition();
+            var circCopyDefinition = 
+                (ksCircularCopyDefinition)entityCircularCopy.GetDefinition();
 
-            var baseAxisOZ = (ksEntity)part.GetDefaultEntity((short)Obj3dType.o3d_axisOZ);
+            var baseAxisOZ = 
+                (ksEntity)_part.GetDefaultEntity((short)Obj3dType.o3d_axisOZ);
 
-            var entityCollectionCircle = (ksEntityCollection)circCopyDefinition.GetOperationArray();
+            var entityCollectionCircle = 
+                (ksEntityCollection)circCopyDefinition.GetOperationArray();
 
             circCopyDefinition.SetCopyParamAlongDir(notchCount, 360, true, false);
-            circCopyDefinition.SetAxis(baseAxisOZ); //Устанавливаем ось OZ
+            circCopyDefinition.SetAxis(baseAxisOZ); 
             entityCollectionCircle.Add(cutExtrusionDefinition);
             entityCircularCopy.Create();
+        }
+
+        /// <summary>
+        /// Второстепенный метод, создающий новый эскиз
+        /// </summary>
+        /// <param name="plane">Плоскость, выбраная в качестве эскиза</param>
+        private void CreateEntitySketch(short plane)
+        {
+            var currentPlane = (ksEntity)_part.GetDefaultEntity(plane); 
+
+            _entitySketch = (ksEntity)_part.NewEntity((short)Obj3dType.o3d_sketch); 
+            _sketchDefinition = (ksSketchDefinition)_entitySketch.GetDefinition(); 
+            _sketchDefinition.SetPlane(currentPlane);   
+            _entitySketch.Create(); 
         }
     }
 }
