@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using HandleApp;
-using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace HandleAppUI
 {
@@ -12,6 +13,15 @@ namespace HandleAppUI
         {
             InitializeComponent();
 
+            var displayMode = new List<string>()
+                {"Каркас", "Без невидимых линий",
+                    "Невидимые линии тонкие", "Полутоновой"};
+
+            foreach (var element in displayMode)
+            {
+                DisplayModeСomboBox.Items.Add(element);
+            }
+
             _connector = new KompasConnector();
         }
 
@@ -20,82 +30,131 @@ namespace HandleAppUI
         private void StartKompasButton_Click(object sender, EventArgs e)
         {
             _connector.StartKompas();
-            //TODO: duble
-            CreateDetailButton.Enabled = true;
-            CloseKompasButton.Enabled = true;
-            StartKompasButton.Enabled = false;
+
+            SetFormView(false, true, true, false, true);
         }
 
         private void CloseKompasButton_Click(object sender, EventArgs e)
         {
             _connector.CloseKompas3D();
-            //TODO: duble
-            StartKompasButton.Enabled = true;
-            CreateDetailButton.Enabled = false;
-            CloseKompasButton.Enabled = false;
+
+            SetFormView(true, false, false, false, false);
         }
 
         private void CreateDetailButton_Click(object sender, EventArgs e)
         {
+            var errorMessage = new List<string>();
+            var dict = new Dictionary<TextBox, string>
+            {
+                {BackDiameterTextBox, "Диаметр задней части ручки введен некорректно"},
+                {BackLenghtTextBox, "Длина задней части ручки введена некорректно"},
+                {FrontLenghtTextBox, "Длина передней части ручки введена некорректно"},
+                {HoleDiameterTextBox, "Диаметр отверстия ручки введен некорректно"},
+            };
+            var valueParams = new List<double>();
+            foreach (var keyValuePair in dict)
+            {
+                var curentParameter = 0.0;
+                if (!double.TryParse(keyValuePair.Key.Text, out curentParameter))
+                {
+                    errorMessage.Add(keyValuePair.Value);
+                }
+
+                valueParams.Add(curentParameter);
+            }
+
+            if (!int.TryParse(NotchCountTextBox.Text, out int notchCount))
+            {
+                errorMessage.Add("Количество вырезов ручки введено некорректно");
+            }
+
+            if (errorMessage.Count > 0)
+            {
+                ShowMessage(string.Join("\n", errorMessage));
+                return;
+            }
+
             try
             {
-                 var parameters = new HandleParameters(double.Parse(BackDiameterTextBox.Text),
-                     double.Parse(BackLenghtTextBox.Text),
-                     double.Parse(FrontLenghtTextBox.Text),
-                     double.Parse(HoleDiameterTextBox.Text),
-                     int.Parse(NotchCountTextBox.Text));
-
+                var parameters = new HandleParameters(valueParams[0], 
+                    valueParams[1], valueParams[2], valueParams[3], notchCount);
                 var builder = new HandleBuilder(_connector.Kompas);
+
                 builder.CreateDetail(parameters);
+                SetFormView(false, true, true, true, true);
             }
             catch (FormatException ex)
             {
-                MessageBox.Show("Данные введены некоректно \nВозможно есть пустые поля или лишнии запятые",
-                    "Предупреждение",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                ShowMessage(ex.Message);
                 return;
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show(ex.Message,
-                    "Предупреждение",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                ShowMessage(ex.Message);
                 return;
             }
             catch (COMException)
             {
-                MessageBox.Show("Невозможно построить деталь так как Компас закрыт",
-                    "Предупреждение",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                //TODO: duble
-                StartKompasButton.Enabled = true;
-                CreateDetailButton.Enabled = false;
-                CloseKompasButton.Enabled = false;
-
+                ShowMessage("Невозможно построить деталь так как Компас закрыт");
+                SetFormView(true, false, false, false, true);
                 return;
             }
         }
 
         private void ValidateDoubleTextBoxs_KeyPress(object sender, KeyPressEventArgs e)
         {
-            //TODO: regex
-            var symbol = e.KeyChar;
-            if (e.KeyChar == '.')
-            {
-                e.KeyChar = ',';
-            }
-            e.Handled = !(char.IsDigit(symbol) || symbol == '.' || symbol == ',' || symbol == '\b');
+            e.Handled = !Regex.IsMatch(e.KeyChar.ToString(), @"[\d\b,]");
         }
 
         private void ValidateIntTextBoxs_KeyPress(object sender, KeyPressEventArgs e)
         {
-            //TODO: regex
-            var symbol = e.KeyChar;
+            e.Handled = !Regex.IsMatch(e.KeyChar.ToString(), @"[\d\b]");
+        }
 
-            e.Handled = !(char.IsDigit(symbol) || symbol == '\b');
+        private void ShowMessage(string message)
+        {
+            MessageBox.Show(message,
+                "Предупреждение",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+        }
+
+        private void CreateSpecButton_Click(object sender, EventArgs e)
+        {
+            var spec = new SpecificationCreator(_connector.Kompas);
+            var specParameters = new List<string>()
+            {
+                DocDesignationTB.Text,
+                DocNameTB.Text,
+                DetailDesignationTB.Text,
+                DetailNameTB.Text,
+                DeatilCountTB.Text,
+                GostTB.Text,
+                StampNameTB.Text,
+                StampDesignationTB.Text,
+                DeveloperTB.Text,
+                TeacherTB.Text
+            };
+            spec.CreateSpec(specParameters);
+        }
+
+        private void DisplayModeСomboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (DisplayModeСomboBox.SelectedIndex == -1)
+            {
+                return;
+            }
+            _connector.SelectDisplayMode(DisplayModeСomboBox.SelectedIndex);
+        }
+
+        private void SetFormView(bool starButton, bool createButton, bool closeButton, bool comboBox, bool createSpecButton)
+        {
+            StartKompasButton.Enabled = starButton;
+            CreateDetailButton.Enabled = createButton;
+            CloseKompasButton.Enabled = closeButton;
+            DisplayModeСomboBox.Enabled = comboBox;
+            CreateSpecButton.Enabled = createSpecButton;
+            DisplayModeСomboBox.SelectedIndex = -1;
         }
     }
 }

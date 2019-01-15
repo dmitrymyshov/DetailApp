@@ -37,30 +37,31 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Kompas6API2D5COM">
-      <HintPath>D:\kompas\SDK\C#\Common\Kompas6API2D5COM.dll</HintPath>
+      <HintPath>D:\solidworks\SDK\C#\Common\Kompas6API2D5COM.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Kompas6API3D5COM">
-      <HintPath>D:\kompas\SDK\C#\Common\Kompas6API3D5COM.dll</HintPath>
+      <HintPath>D:\solidworks\SDK\C#\Common\Kompas6API3D5COM.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Kompas6API5">
-      <HintPath>D:\kompas\SDK\C#\Common\Kompas6API5.dll</HintPath>
+      <HintPath>D:\solidworks\SDK\C#\Common\Kompas6API5.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Kompas6Constants">
-      <HintPath>D:\kompas\SDK\C#\Common\Kompas6Constants.dll</HintPath>
+      <HintPath>D:\solidworks\SDK\C#\Common\Kompas6Constants.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Kompas6Constants3D">
-      <HintPath>D:\kompas\SDK\C#\Common\Kompas6Constants3D.dll</HintPath>
+      <HintPath>D:\solidworks\SDK\C#\Common\Kompas6Constants3D.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="KompasAPI7">
-      <HintPath>D:\kompas\SDK\C#\Common\KompasAPI7.dll</HintPath>
+      <HintPath>D:\solidworks\SDK\C#\Common\KompasAPI7.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -74,6 +75,7 @@
     <Compile Include="HandleParameters.cs" />
     <Compile Include="KompasConnector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpecificationCreator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

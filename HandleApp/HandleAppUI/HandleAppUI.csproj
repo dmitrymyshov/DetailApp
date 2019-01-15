@@ -36,10 +36,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Kompas6API5">
-      <HintPath>D:\kompas\SDK\C#\Common\Kompas6API5.dll</HintPath>
+      <HintPath>D:\solidworks\SDK\C#\Common\Kompas6API5.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />

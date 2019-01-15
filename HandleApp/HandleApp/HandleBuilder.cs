@@ -8,16 +8,34 @@ namespace HandleApp
     /// </summary>
     public class HandleBuilder
     {
+        /// <summary>
+        /// Указатель на интерфейс API Компас
+        /// </summary>
         private KompasObject _kompas;
 
+        /// <summary>
+        /// Указатель на интерфейс документа-модели
+        /// </summary>
         private ksDocument3D _doc3D;
 
+        /// <summary>
+        /// Указатель на интерфейс компонента
+        /// </summary>
         private ksPart _part;
 
+        /// <summary>
+        /// Указатель на интерфейс сущности
+        /// </summary>
         private ksEntity _entitySketch;
 
+        /// <summary>
+        /// Указатель на интерфейс параметров плоскости
+        /// </summary>
         private ksSketchDefinition _sketchDefinition;
 
+        /// <summary>
+        /// Указатель на интерфейс графического документа
+        /// </summary>
         private ksDocument2D _sketchEdit;
 
         /// <summary>
@@ -46,7 +64,6 @@ namespace HandleApp
             var frontLenght = parameters.FrontLenght * 10;
             var holeRadius = parameters.HoleDiameter * 5;
             var notchCount = parameters.NotchCount;
-
 
             _doc3D = (ksDocument3D)_kompas.ActiveDocument3D(); 
             _part = (ksPart)_doc3D.GetPart((short)Part_Type.pTop_Part);
