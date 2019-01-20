@@ -25,6 +25,9 @@ namespace HandleAppUI
             _connector = new KompasConnector();
         }
 
+        /// <summary>
+        /// Взаимодействие с Компас-3D
+        /// </summary>
         private KompasConnector _connector;
 
         private void StartKompasButton_Click(object sender, EventArgs e)
@@ -111,6 +114,10 @@ namespace HandleAppUI
             e.Handled = !Regex.IsMatch(e.KeyChar.ToString(), @"[\d\b]");
         }
 
+        /// <summary>
+        /// Вывод сообщение об ошибке
+        /// </summary>
+        /// <param name="message">сообщение об ошибке</param>
         private void ShowMessage(string message)
         {
             MessageBox.Show(message,
@@ -147,6 +154,14 @@ namespace HandleAppUI
             _connector.SelectDisplayMode(DisplayModeСomboBox.SelectedIndex);
         }
 
+        /// <summary>
+        /// Метод, задающий возможность взаимодействия элементов
+        /// </summary>
+        /// <param name="starButton">Кнопка "Запуск"</param>
+        /// <param name="createButton">Кнопка "Построить"</param>
+        /// <param name="closeButton">Кнопка "Закрыть"</param>
+        /// <param name="comboBox">Выпадающий список</param>
+        /// <param name="createSpecButton">Кнопка "Создать"</param>
         private void SetFormView(bool starButton, bool createButton, bool closeButton, bool comboBox, bool createSpecButton)
         {
             StartKompasButton.Enabled = starButton;
